@@ -22,7 +22,7 @@
     <script src="{{ asset('assets/js/template.js') }}"></script>
     <script src="{{ asset('assets/js/settings.js') }}"></script>
     <script src="{{ asset('assets/js/todolist.js') }}"></script>
-{{--    @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
+    @vite(['resources/css/style.css', 'resources/js/app.js'])
     @routes
 </head>
 <body>

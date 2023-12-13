@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('Create Team') }}
+    {{ __('Edit Team') }}
 @endsection
 
 @section('content')
@@ -8,19 +8,18 @@
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">
-                        {{ __('Create Team') }}
-                    </h3>
-                    <form class="form-sample" method="post" action="{{ route('teams.store') }}"
+                    <h4 class="card-title text-2xl">Actualizar Equipo</h4>
+                    <form class="form-sample" method="post" action="{{ route('teams.update', Vinkla\Hashids\Facades\Hashids::encode($team->id)) }}"
                           enctype="multipart/form-data">
                         @csrf
+                        @method('patch')
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label" for="name">{{ __('Name') }}</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control rounded" name="name" id="name"
-                                               placeholder="{{ __('Name') }}" value="{{ old('name')}}"/>
+                                               placeholder="{{ __('Name') }}" value="{{ old('name', $team->name)}}"/>
                                     </div>
                                     @error('name')
                                     <div class="text-danger">{{ $message }}</div>
@@ -32,7 +31,7 @@
                                     <label class="col-sm-3 col-form-label" for="acronym">{{ __('Acronym') }}</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control rounded" name="acronym" id="acronym"
-                                               placeholder="{{ __('Acronym') }}" value="{{ old('acronym') }}"/>
+                                               placeholder="{{ __('Acronym') }}" value="{{ old('acronym', $team->acronym) }}"/>
                                     </div>
                                     @error('acronym')
                                     <div class="text-danger">{{ $message }}</div>
@@ -115,7 +114,7 @@
                                 <a class="btn btn-danger" href="{{ route('teams.index') }}">{{ __('Cancel') }}</a>
                             </div>
                             <div class="col-md-9 justify-end flex justify-items-end mr-10">
-                                <button class="btn btn-success" type="submit">{{ __('Create Team') }}</button>
+                                <button class="btn btn-outline-success" type="submit">{{ __('Edit Team') }}</button>
                             </div>
                         </div>
                     </form>

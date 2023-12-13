@@ -38,6 +38,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/teams/{id}/delete', [TeamsController::class, 'destroy'])->name('teams.delete');
     Route::post('/teams/{id}/addPlayers', [TeamsController::class, 'addPlayerOfTeam'])->name('teams.add');
 
+    Route::get('/soccer-matches', [SoccerMatchesController::class, 'index'])->name('matches.index');
+    Route::get('/soccer-matches/create', [SoccerMatchesController::class, 'create'])->name('matches.create');
+    Route::post('/soccer-matches/store', [SoccerMatchesController::class, 'store'])->name('matches.store');
+    Route::get('/soccer-matches/{id}', [SoccerMatchesController::class, 'show'])->name('matches.show');
+    Route::patch('/soccer-matches/{id}/addFouls', [SoccerMatchesController::class, 'addGoalsFouls'])->name('matches.add_goals');
+    Route::post('/soccer-matches/{id}/crete-goals', [SoccerMatchesController::class, 'addGoalsTeam'])->name('matches.team_goals');
+    Route::get('/soccer-matches/{id}/goals', [SoccerMatchesController::class, 'goals'])->name('matches.goals');
+
 });
 
 require __DIR__.'/auth.php';
