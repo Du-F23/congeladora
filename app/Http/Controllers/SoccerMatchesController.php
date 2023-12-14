@@ -22,10 +22,10 @@ class SoccerMatchesController extends Controller
 
     public function create(): View
     {
-        $referee = User::where('rol_id', 2)->get();
+        $referees = User::where('rol_id', 2)->get();
         $teams = Teams::all();
 
-        return view('matches.create', compact('teams', 'referee'));
+        return view('matches.create', compact('teams', 'referees'));
     }
 
     /**

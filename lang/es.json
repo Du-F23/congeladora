@@ -150,7 +150,6 @@
     "Acronym": "Acronimo",
     "Welcome": "Bienvenido",
     "Actions": "Acciones",
-    "List of Teams": "Listado de Equipos",
     "Create Team": "Crear Equipo",
     "Category": "Categoria",
     "Team Created Successfully!": "Equipo creado Correctamente!",
@@ -165,5 +164,6 @@
     "List of Teams": "Listado de Partidos",
     "Create Soccer Match": "Crear Partido",
     "Local Team": "Equipo Local",
-    "Visit Team": "Equipo Visitante"
+    "Visit Team": "Equipo Visitante",
+    "Referee": "Arbitro"
 }

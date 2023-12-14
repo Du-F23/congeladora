@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SoccerMatches;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,11 +18,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (!Auth::check()){
+    $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->get();
+
+    return view('welcome', compact('soccer'));
+    }
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->get();
+    return view('dashboard', compact('soccer'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -48,4 +56,4 @@ Route::middleware('auth')->group(function () {
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

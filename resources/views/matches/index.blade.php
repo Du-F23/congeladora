@@ -43,7 +43,7 @@
                 <div class="card-body mt-auto">
                     <div class="row">
                         @foreach($soccer as $match)
-                            <div class="card d-flex align-items-center">
+                            <div class="card d-flex align-items-center" style="background-color: #d5d0d0; margin: 4px">
                                 <div class="card-body" style="width: 300px">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="text-center ml-lg-2">
