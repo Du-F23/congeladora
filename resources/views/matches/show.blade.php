@@ -35,7 +35,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label" for="player_id">{{ __('Add Goals') }}</label>
                                                         <div class="col-sm-9">
-                                                            <select class="form-control" name="player_id" id="player_id">
+                                                            <select class="js-example-basic-multiple w-100" multiple="multiple" name="player_id" id="player_id">
                                                                 @foreach($team_local_users as $player_local)
                                                                     <option value="{{ $player_local->id }}">{{ $player_local->name }}</option>
                                                                 @endforeach
