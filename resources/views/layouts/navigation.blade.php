@@ -20,6 +20,7 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
+        @if(Auth::check())
             <li class="nav-item dropdown">
                 <p class="font-bold h4 justify-center align-center text-center">{{ Auth::user()->name }}</p>
             </li>
@@ -41,6 +42,7 @@
                     </form>
                 </div>
             </li>
+        @endif
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
             <span class="icon-menu"></span>
