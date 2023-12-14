@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('welcome', compact('soccer'));
     }
     return redirect()->route('dashboard');
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->get();
@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/soccer-matches/create', [SoccerMatchesController::class, 'create'])->name('matches.create');
     Route::post('/soccer-matches/store', [SoccerMatchesController::class, 'store'])->name('matches.store');
     Route::get('/soccer-matches/{id}', [SoccerMatchesController::class, 'show'])->name('matches.show');
+    Route::get('/soccer-matches/{id}/json', [SoccerMatchesController::class, 'showJson'])->name('matches.json');
+    Route::get('/soccer-matches/{id}/edit', [SoccerMatchesController::class, 'edit'])->name('matches.edit');
+    Route::delete('/soccer-matches/{id}/delete', [SoccerMatchesController::class, 'destroy'])->name('matches.delete');
     Route::patch('/soccer-matches/{id}/addFouls', [SoccerMatchesController::class, 'addGoalsFouls'])->name('matches.add_goals');
     Route::post('/soccer-matches/{id}/crete-goals', [SoccerMatchesController::class, 'addGoalsTeam'])->name('matches.team_goals');
     Route::get('/soccer-matches/{id}/goals', [SoccerMatchesController::class, 'goals'])->name('matches.goals');

@@ -80,7 +80,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
                 <div class="modal fade" id="deleteTeam" tabindex="-1"
                      aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -41,28 +41,51 @@
                     </div>
                 </div>
                 <div class="card-body mt-auto">
-                    <div class="row">
-                        @foreach($soccer as $match)
-                            <div class="card d-flex align-items-center" style="background-color: #d5d0d0; margin: 4px">
-                                <div class="card-body" style="width: 300px">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="text-center ml-lg-2">
-                                            <img src="{{ asset('storage/'.$match->team_local->team)}}" alt="{{$match->team_local->name}}" width="100" height="100" class="rounded-full"/>
-                                            <p class="text-2xl font-bold text-capitalize">{{ $match->team_local->name }}</p>
-                                            <h3>{{ $match->team_local_goals }}</h3>
-                                        </div>
-                                        <div class="text-center">
-                                            <p class="font-weight-medium">VS</p>
-                                        </div>
-                                        <div class="text-center mr-lg-2">
-                                            <img src="{{ asset('storage/'.$match->team_visit->team)}}" alt="{{$match->team_visit->name}}" width="100" height="100" class="rounded-full"/>
-                                            <p class="text-2xl font-bold text-capitalize">{{ $match->team_visit->name }}</p>
-                                            <h3>{{ $match->team_visit_goals }}</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{{ __('Team Local') }}</th>
+                                <th>{{ __('Team Visit') }}</th>
+                                <th>{{ __('Day Of Match') }}</th>
+                                <th>{{ __('Actions') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($soccer as $match)
+                                <tr>
+                                    <td><p class="font-weight-medium text-xl">{{ $loop->index + 1 }}</p></td>
+                                    <td>
+                                        <img src="{{ asset('storage/'.$match->team_local->team)}}" alt="{{$match->team_local->name}}"/>
+                                        <h2 class="font-weight-medium">{{ $match->team_local->name }}</h2>
+                                    </td>
+                                    <td>
+                                        <img src="{{ asset('storage/'.$match->team_visit->team)}}" alt="{{$match->team_visit->name}}"/>
+                                        <h2 class="font-weight-medium">{{ $match->team_visit->name }}</h2>
+                                    </td>
+                                    <td>
+                                        <h3>{{ Carbon\Carbon::parse($match->dayOfMatch)->format('D, d M Y H:i') }}</h3>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('matches.show', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
+                                           class="btn btn-facebook">
+                                            <i class="ti ti-eye btn-icon-prepend"></i>
+                                        </a>
+                                        @if(Auth::user()->rol_id === 1)
+                                            <a href="{{ route('matches.edit', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
+                                               class="btn btn-twitter">
+                                                <i class="ti ti-edit btn-icon-prepend"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTeam" onclick="deleteTeam({{$match->id}})">
+                                                <i class="ti ti-trash-x btn-icon-prepend"></i>
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="modal fade" id="deleteTeam" tabindex="-1"
@@ -71,8 +94,10 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Team') }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                <button type="button" class="btn btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                    <i class="ti ti-x"></i>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 <div class="container">
@@ -86,7 +111,7 @@
                                                     <button class="btn btn-secondary" type="button"
                                                             data-bs-dismiss="modal">{{ __('Cancel')}}
                                                     </button>
-                                                    <button class="btn btn-danger" type="submit">{{ __('Delete Team') }}</button>
+                                                    <button class="btn btn-danger" type="submit">{{ __('Delete Soccer Match') }}</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -102,13 +127,13 @@
                 // hace una peticion ajax para obtener la informacion de la moto
                 function deleteTeam(id) {
                     let form = document.getElementById('deleteForm')
-                    form.action = route('teams.delete', id)
+                    form.action = route('matches.delete', id)
                     $.ajax({
-                        url: route('teams.json', id),
+                        url: route('matches.json', id),
                         type: 'GET',
                         success: function (response) {
-                            // console.log(response.name)
-                            $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.name);
+                            // console.log(response)
+                            $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.team_local.name + ' vs ' + response.team_local.name + ' ' +`{{ __('Day Of Match') }}` + response.dayOfMatch);
                         }
                     })
                 }

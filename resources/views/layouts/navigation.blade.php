@@ -30,7 +30,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                     <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                        <i class="ti-user text-primary w-2 mr-4"></i>
+                        <i class="ti ti-user text-primary w-2 mr-4"></i>
                         {{ __('Profile') }}
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
@@ -42,7 +42,19 @@
                     </form>
                 </div>
             </li>
+            @else
+                <li class="nav-item nav-profile dropdown">
+                    <a class="dropdown-item" href="{{ route('login') }}">
+                        <i class="ti ti-login text-primary w-2 mr-4"></i>
+                        {{ __('Login') }}
+                    </a>
+                    <a class="dropdown-item" href="{{ route('register') }}">
+                        <i class="ti ti-user text-primary w-2 mr-4"></i>
+                        {{ __('Register') }}
+                    </a>
+                </li>
         @endif
+
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
             <span class="icon-menu"></span>

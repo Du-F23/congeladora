@@ -11,6 +11,7 @@
                 <div class="card-body mt-auto">
                     <div class="row">
                         @foreach($soccer as $match)
+                            <a href="{{ route('matches.show', Vinkla\Hashids\Facades\Hashids::encode($match->id) ) }}" style="text-decoration: none; color: #0e1014">
                             <div class="card d-flex align-items-center" style="background-color: #d5d0d0; margin: 4px">
                                 <div class="card-body" style="width: 300px">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -28,8 +29,10 @@
                                             <h3>{{ $match->team_visit_goals }}</h3>
                                         </div>
                                     </div>
+                                    <label class="badge badge-info">Faltan {{ \Carbon\Carbon::now()->diff($match->dayOfMatch)->days }} días para el partido.</label>
                                 </div>
                             </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>

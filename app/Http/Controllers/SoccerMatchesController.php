@@ -6,13 +6,15 @@ use App\Models\MatchUser;
 use App\Models\SoccerMatches;
 use App\Models\Teams;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Vinkla\Hashids\Facades\Hashids;
 
 class SoccerMatchesController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->get();
 
@@ -28,9 +30,6 @@ class SoccerMatchesController extends Controller
         return view('matches.create', compact('teams', 'referees'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -77,54 +76,56 @@ class SoccerMatchesController extends Controller
 
     public function addGoalsFouls(Request $request, $id): RedirectResponse
     {
-            $request->validate([
-                'team_local_goals' => ['required', 'integer'],
-                'team_visit_goals' => ['required', 'integer'],
-                'team_local_fouls' => ['required', 'integer'],
-                'team_visit_fouls' => ['required', 'integer'],
-            ]);
+        $request->validate([
+            'team_local_goals' => ['required', 'integer'],
+            'team_visit_goals' => ['required', 'integer'],
+            'team_local_fouls' => ['required', 'integer'],
+            'team_visit_fouls' => ['required', 'integer'],
+        ]);
 
-            $match = SoccerMatches::find($id);
+        $match = SoccerMatches::find($id);
 
-            $match->update([
-                'team_local_goals' => $request->team_local_goals,
-                'team_visit_goals' => $request->team_visit_goals,
-                'team_local_fouls' => $request->team_local_fouls,
-                'team_visit_fouls' => $request->team_visit_fouls,
-                'started' => true,
-            ]);
+        $match->update([
+            'team_local_goals' => $request->team_local_goals,
+            'team_visit_goals' => $request->team_visit_goals,
+            'team_local_fouls' => $request->team_local_fouls,
+            'team_visit_fouls' => $request->team_visit_fouls,
+            'started' => true,
+        ]);
 
-            return redirect()->route('matches.show', $match->id);
+        return redirect()->route('matches.show', $match->id);
 
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id): View
     {
+        $id=Hashids::decode($id);
         $match = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->find($id);
+        $match=$match[0];
+        $team_local_users=$match->team_local->players;
+        $team_visit_users=$match->team_visit->players;
 
-        return view('matches.show', compact('match'));
+        return view('matches.show', compact('match', 'team_local_users', 'team_visit_users'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function edit($id)
+    {
+        //
+    }
+     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        //
+        $match=SoccerMatches::find($id);
+        $match->delete();
+
+        return redirect()->route('matches.index');
     }
 
-    public function addGoalsTeam(Request $request, $id)
+    public function addGoalsTeam(Request $request, $id): RedirectResponse
     {
             $request->validate([
                 'player_id' => ['required', 'exists:' . User::class . ',id'],
@@ -141,12 +142,19 @@ class SoccerMatchesController extends Controller
             return redirect()->route('matches.show', $match->id);
     }
 
-    public function goals($id)
+    public function goals($id): RedirectResponse
     {
         $id = SoccerMatches::find($id);
         $team_local = MatchUser::with('player')->where('soccerMatch_id', $id->id)->where('team_id', $id->team_local_id)->get();
         $team_visit = MatchUser::with('player')->where('soccerMatch_id', $id->id)->where('team_id', $id->team_visit_id)->get();
 
         return redirect()->route('matches.show', $id->id);
+    }
+
+    public function showJson($id): JsonResponse
+    {
+        $match=SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->find($id);
+
+        return response()->json($match);
     }
 }

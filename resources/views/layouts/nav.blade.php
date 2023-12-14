@@ -1,5 +1,6 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
+        @if(Auth::check())
         <li class="nav-item">
             <a class="nav-link text-center items-center" href="{{ route('dashboard') }}">
                 <i class="icon-grid menu-icon"></i>
@@ -18,30 +19,33 @@
                 <span class="menu-title">{{ __('Soccer Matches') }}</span>
             </a>
         </li>
-        <li class="nav-item">
+        @else
+        <li class="nav-item {{ route('welcome') ? 'active' : '' }}">
             <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
                 <i class="icon-columns menu-icon"></i>
-                <span class="menu-title">Form elements</span>
+                <span class="menu-title">{{ __('Soccer Matches') }}</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="form-elements">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic Elements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('matches.index') }}">{{ __('Soccer Matches') }}</a></li>
                 </ul>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                <i class="icon-bar-graph menu-icon"></i>
-                <span class="menu-title">Charts</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="charts">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
-                </ul>
-            </div>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#score" aria-expanded="false" aria-controls="scores">
+                    <i class="icon-bar-graph menu-icon"></i>
+                    <span class="menu-title">{{ __('Scores') }}</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="score">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="">{{ __('Scores') }}</a></li>
+                    </ul>
+                </div>
+            </li>
+        @endif
+
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
                 <i class="icon-grid-2 menu-icon"></i>

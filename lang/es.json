@@ -161,9 +161,13 @@
     "The local team already has a match scheduled for that day.": "El equipo local ya tiene un partido programado para ese día.",
     "The visiting team already has a match scheduled for that day": "El equipo visitante ya tiene un partido programado para ese día.",
     "Soccer Matches": "Partidos",
+    "Soccer Match": "Partido",
     "List of Teams": "Listado de Partidos",
     "Create Soccer Match": "Crear Partido",
     "Local Team": "Equipo Local",
     "Visit Team": "Equipo Visitante",
-    "Referee": "Arbitro"
+    "Referee": "Arbitro",
+    "Day Of Match": "Día de juego",
+    "Delete Soccer Match": "Eliminar Partido",
+    "Add Goals": "Añadir Goles"
 }

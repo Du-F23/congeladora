@@ -22,7 +22,7 @@
     <script src="{{ asset('assets/js/template.js') }}"></script>
     <script src="{{ asset('assets/js/settings.js') }}"></script>
     <script src="{{ asset('assets/js/todolist.js') }}"></script>
-{{--    @vite(['resources/css/style.css', 'resources/js/app.js'])--}}
+    @vite(['resources/css/style.css', 'resources/js/app.js'])
     @routes
 </head>
 <body>
@@ -36,14 +36,17 @@
                     <div class="col-md-12 grid-margin">
                         <div class="row">
                             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                                @if(in_array(Route::currentRouteName(), ['dashboard', 'profile']) || Auth::check())
+                                @if(in_array(Route::currentRouteName(), ['dashboard', 'profile']))
                                     <h2 class="font-bold text-3xl">{{ __('Welcome')}}, {{  Auth::user()->name  }}</h2>
+                                @endif
+                                @if((in_array(Route::currentRouteName(), ['welcome', 'scores']) || !Auth::check()))
+                                    <h2 class="font-bold text-3xl">{{ __('Soccer Matches')}}</h2>
                                 @endif
                             </div>
                             <div class="col-12 col-xl-4">
                                 <div class="justify-content-end d-flex">
                                     <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                                        <i class="mdi mdi-calendar"></i>{{\Carbon\Carbon::now()->format('D, d M Y')}}
+                                        <i class="mdi mdi-calendar"></i>{{\Carbon\Carbon::now()->locale(app()->getLocale())->translatedFormat('D, d M Y H:i A')}}
                                     </div>
                                 </div>
                             </div>
