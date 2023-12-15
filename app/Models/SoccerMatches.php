@@ -46,9 +46,13 @@ class SoccerMatches extends Model
         return $this->hasMany(MatchUser::class, 'soccerMatch_id');
     }
 
+    public function addGoals()
+    {
+        return $this->belongsToMany(MatchUser::class, 'match_users', 'soccerMatch_id', 'player_id');
+    }
+
     public function ganador()
     {
         return $this->team_local_goals > $this->team_visit_goals ? $this->team_local_id : $this->team_visit_id;
     }
-
 }

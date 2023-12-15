@@ -15,8 +15,6 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('soccerMatch_id')->constrained('soccer_matches');
             $table->foreignId('player_id')->constrained('users');
-            $table->foreignId('team_id')->constrained('teams');
-            $table->integer('goals');
             $table->timestamps();
         });
     }

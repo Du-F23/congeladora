@@ -86,7 +86,7 @@
                                     <div class="col-sm-9">
                                         <select class="form-control" name="referee_id" id="capitan_id">
                                             @foreach($referees as $referee_id)
-                                                <option value="{{ $referee_id->id }}">{{ $referee_id->name }}</option>
+                                                <option value="{{ $referee_id->id }}" style="font-size: 20px">{{ $referee_id->name }}</option>
                                             @endforeach
                                             @error('referee_id')
                                             <div class="text-danger">{{ $message }}</div>

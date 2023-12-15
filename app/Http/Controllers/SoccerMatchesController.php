@@ -22,14 +22,6 @@ class SoccerMatchesController extends Controller
         return view('matches.index', compact('soccer'));
     }
 
-    public function create(): View
-    {
-        $referees = User::where('rol_id', 2)->get();
-        $teams = Teams::all();
-
-        return view('matches.create', compact('teams', 'referees'));
-    }
-
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -74,6 +66,14 @@ class SoccerMatchesController extends Controller
         return redirect()->route('matches.index');
     }
 
+    public function create(): View
+    {
+        $referees = User::where('rol_id', 2)->get();
+        $teams = Teams::all();
+
+        return view('matches.create', compact('teams', 'referees'));
+    }
+
     public function addGoalsFouls(Request $request, $id): RedirectResponse
     {
         $request->validate([
@@ -97,13 +97,18 @@ class SoccerMatchesController extends Controller
 
     }
 
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
     public function show($id): View
     {
-        $id=Hashids::decode($id);
+        $id = Hashids::decode($id);
         $match = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->find($id);
-        $match=$match[0];
-        $team_local_users=$match->team_local->players;
-        $team_visit_users=$match->team_visit->players;
+        $match = $match[0];
+        $team_local_users = $match->team_local->players;
+        $team_visit_users = $match->team_visit->players;
 
         return view('matches.show', compact('match', 'team_local_users', 'team_visit_users'));
     }
@@ -112,14 +117,10 @@ class SoccerMatchesController extends Controller
     {
         //
     }
-     public function update(Request $request, $id)
-    {
-        //
-    }
 
     public function destroy($id)
     {
-        $match=SoccerMatches::find($id);
+        $match = SoccerMatches::find($id);
         $match->delete();
 
         return redirect()->route('matches.index');
@@ -127,19 +128,29 @@ class SoccerMatchesController extends Controller
 
     public function addGoalsTeam(Request $request, $id): RedirectResponse
     {
-            $request->validate([
-                'player_id' => ['required', 'exists:' . User::class . ',id'],
-                'goals' => ['required', 'integer']
-            ]);
-            $id = SoccerMatches::find($id);
+        $request->validate([
+            'player_id_local' => ['exists:' . User::class . ',id'],
+            'player_id_visit' => ['exists:' . User::class . ',id'],
+            'goals_local' => ['integer', 'nullable'],
+            'goals_visit' => ['integer', 'nullable'],
+        ]);
 
-            $match = MatchUser::create([
-                'soccerMatch_id' => $id->id,
-                'player_id' => $request->player_id,
-                'goals' => $request->goals
-            ]);
+//            dd($request->all());
+        $id = SoccerMatches::find($id);
 
-            return redirect()->route('matches.show', $match->id);
+        if ($request->player_id_local || $request->goals_local) {
+            $id->addGoals()->attach($request->player_id_local);
+            $id->team_local_goals = $request->goals_local;
+            $id->save();
+        }
+
+        $id->addGoals()->attach($request->player_id_visit);
+        $id->team_visit_goals = $request->goals_visit;
+        $id->save();
+
+        $id=Hashids::encode($id->id);
+
+        return redirect()->route('matches.show', $id);
     }
 
     public function goals($id): RedirectResponse
@@ -153,7 +164,7 @@ class SoccerMatchesController extends Controller
 
     public function showJson($id): JsonResponse
     {
-        $match=SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->find($id);
+        $match = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->find($id);
 
         return response()->json($match);
     }
