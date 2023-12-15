@@ -21,10 +21,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'photo',
         'number',
+        'password',
         'rol_id',
-        'photo'
     ];
 
     /**
@@ -46,4 +46,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function team()
+    {
+        return $this->belongsTo(Teams::class, 'capitan_id');
+    }
 }

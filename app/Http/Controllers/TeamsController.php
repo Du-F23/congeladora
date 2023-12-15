@@ -116,14 +116,16 @@ class TeamsController extends Controller
             'capitan_id' => ['integer', 'exists:' . User::class . ',id'],
         ]);
 
+        $teams = Teams::find($id);
+        $teams=$teams[0];
+
         if ($request->file('team')) {
             $team = 'team/' . str_replace(" ", "_", $request->name) . '_' . date('Y-m-d') . '_' . $request->file('team')->getClientOriginalName();
             $team = $request->file('team')->storeAs('public', $team);
             $team = str_replace("public/", "", $team);
+            $teams->team=$team;
+            $teams->save();
         }
-
-        $teams = Teams::find($id);
-        $teams=$teams[0];
 
         $teams->update($request->all());
 

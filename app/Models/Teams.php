@@ -21,7 +21,7 @@ class Teams extends Model
 
     public function capitan(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'capitan_id');
     }
 
     public function players(): BelongsToMany

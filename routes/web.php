@@ -57,6 +57,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/soccer-matches/{id}/create-goals', [SoccerMatchesController::class, 'addGoalsTeam'])->name('matches.team_goals');
     Route::get('/soccer-matches/{id}/goals', [SoccerMatchesController::class, 'goals'])->name('matches.goals');
 
+    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}', [UsersController::class, 'show'])->name('users.show');
+    Route::get('/users/{id}/json', [UsersController::class, 'showJson'])->name('users.json');
+    Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/{id}/update', [UsersController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}/delete', [UsersController::class, 'destroy'])->name('users.delete');
 });
 
 require __DIR__ . '/auth.php';
