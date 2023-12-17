@@ -22,23 +22,38 @@ class SoccerMatchesController extends Controller
         return view('matches.index', compact('soccer'));
     }
 
+    public function create(): View
+    {
+        $referees = User::where('rol_id', 2)->get();
+        $teams = Teams::all();
+
+        return view('matches.create', compact('teams', 'referees'));
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'dayOfMatch' => ['required', 'date'],
             'team_local_id' => ['required', 'exists:' . Teams::class . ',id'],
-            'team_visit_id' => ['required', 'exists:' . Teams::class . ',id'],
+            'team_visit_id' => ['required', 'exists:' . Teams::class . ',id', 'distinct:team_local_id'],
             'referee_id' => ['required', 'exists:' . User::class . ',id'],
         ]);
 
-
-        $dayOfMatchExists = SoccerMatches::where('dayOfMatch', $request->dayOfMatch)->exists();
+//        $dayOfMatchExists = SoccerMatches::where('dayOfMatch', $request->dayOfMatch)->exists();
+        $dayOfMatchExists = SoccerMatches::where('dayOfMatch', $request->dayOfMatch)
+            ->where(function ($query) use ($request) {
+                $query->where('team_local_id', $request->team_local_id)
+                    ->orWhere('team_visit_id', $request->team_local_id);
+            })
+            ->where('started', false)
+            ->exists();
 
         if ($dayOfMatchExists) {
             return redirect()->back()->withErrors(['error' => __('The game schedule already has a match scheduled for that day.')]);
         }
 
         $teamLocalMatchesExist = SoccerMatches::where('team_local_id', $request->team_local_id)
+            ->orWhere('team_visit_id', $request->team_local_id)
             ->where('dayOfMatch', $request->dayOfMatch)
             ->exists();
 
@@ -47,11 +62,16 @@ class SoccerMatchesController extends Controller
         }
 
         $teamVisitMatchesExist = SoccerMatches::where('team_visit_id', $request->team_visit_id)
+            ->orWhere('team_local_id', $request->team_visit_id)
             ->where('dayOfMatch', $request->dayOfMatch)
             ->exists();
 
         if ($teamVisitMatchesExist) {
-            return redirect()->back()->withErrors(['error' => 'The visiting team already has a match scheduled for that day']);
+            return redirect()->back()->withErrors(['error' => __('The visiting team already has a match scheduled for that day')]);
+        }
+
+        if ($request->team_local_id === $request->team_visit_id) {
+            return redirect()->back()->withErrors(['error' => __('The visiting team cannot be the same as the local team')]);
         }
 
 
@@ -64,14 +84,6 @@ class SoccerMatchesController extends Controller
         ]);
 
         return redirect()->route('matches.index');
-    }
-
-    public function create(): View
-    {
-        $referees = User::where('rol_id', 2)->get();
-        $teams = Teams::all();
-
-        return view('matches.create', compact('teams', 'referees'));
     }
 
     public function addGoalsFouls(Request $request, $id): RedirectResponse

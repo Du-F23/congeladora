@@ -19,12 +19,14 @@
                 <span class="menu-title">{{ __('Soccer Matches') }}</span>
             </a>
         </li>
+        @if(Auth::user()->rol_id === 1)
             <li class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('users.index') }}">
                     <i class="ti ti-user menu-icon"></i>
                     <span class="menu-title">{{ __('Users') }}</span>
                 </a>
             </li>
+        @endif
         @else
         <li class="nav-item {{ route('welcome') ? 'active' : '' }}">
             <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">

@@ -65,6 +65,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{id}/update', [UsersController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}/delete', [UsersController::class, 'destroy'])->name('users.delete');
+
+
+    Route::get('/storage/{image}', function ($image) {
+        $url = env('APP_URL');
+        return $url . '/storage/' . $image;
+    })->name('images.show');
 });
 
 require __DIR__ . '/auth.php';

@@ -48,6 +48,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @if(Auth::user()->rol_id != 3 && Auth::user()->rol_id != 4)
                                         <h3>{{ __('Add Goals') }}</h3>
                                         <form method="POST"
                                               action="{{ route('matches.team_goals', $match->id) }}"
@@ -122,6 +123,7 @@
                                                 </div>
                                             </div>
                                         </form>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

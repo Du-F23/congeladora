@@ -1,11 +1,22 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('Create Team') }}
+    {{ __('Create Soccer Match') }}
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-12 grid-margin">
+            @error('error')
+            <div class="alert alert-danger alert-dismissible text-dark mb-4" role="alert">
+                <span class="text-sm"> <a href="javascript:" class="alert-link text-dark">Error</a>.
+                    {{ $message }}.
+                </span>
+                <button type="button" class="btn btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                        aria-label="Close">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            @enderror
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">{{ __('Create Soccer Match') }}</h3>
@@ -15,17 +26,18 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label" for="team_local_id">{{ __('Local Team') }}</label>
+                                    <label class="col-sm-3 col-form-label"
+                                           for="team_local_id">{{ __('Local Team') }}</label>
                                     <div class="col-sm-9">
-                                    <select class="form-control" name="team_local_id" id="team_local_id">
-                                        <option>{{ __('Local Team') }}</option>
-                                        @foreach($teams as $team)
-                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
-                                        @endforeach
-                                        @error('team_local_id')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </select>
+                                        <select class="form-control" name="team_local_id" id="team_local_id">
+                                            <option>{{ __('Local Team') }}</option>
+                                            @foreach($teams as $team)
+                                                <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                            @endforeach
+                                            @error('team_local_id')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +55,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label" for="team_visit_id">{{ __('Visit Team') }}</label>
+                                    <label class="col-sm-3 col-form-label"
+                                           for="team_visit_id">{{ __('Visit Team') }}</label>
                                     <div class="col-sm-9">
                                         <select class="form-control" name="team_visit_id" id="team_visit_id">
                                             <option>{{ __('Visit Team') }}</option>
@@ -71,9 +84,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label" for="dayOfMatch">{{ __('Day Of Match') }}</label>
+                                    <label class="col-sm-3 col-form-label"
+                                           for="dayOfMatch">{{ __('Day Of Match') }}</label>
                                     <div class="col-sm-9">
-                                        <input type="datetime-local" name="dayOfMatch" id="dayOfMatch" class="form-control form-control-lg">
+                                        <input type="datetime-local" name="dayOfMatch" id="dayOfMatch"
+                                               class="form-control form-control-lg">
                                         @error('dayOfMatch')
                                         <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -86,7 +101,8 @@
                                     <div class="col-sm-9">
                                         <select class="form-control" name="referee_id" id="capitan_id">
                                             @foreach($referees as $referee_id)
-                                                <option value="{{ $referee_id->id }}" style="font-size: 20px">{{ $referee_id->name }}</option>
+                                                <option value="{{ $referee_id->id }}"
+                                                        style="font-size: 20px">{{ $referee_id->name }}</option>
                                             @endforeach
                                             @error('referee_id')
                                             <div class="text-danger">{{ $message }}</div>
@@ -98,7 +114,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2 ml-4">
-                                <a class="btn btn-danger" href="{{ route('teams.index') }}">{{ __('Cancel') }}</a>
+                                <a class="btn btn-danger" href="{{ route('matches.index') }}">{{ __('Cancel') }}</a>
                             </div>
                             <div class="col-md-9 justify-end flex justify-items-end mr-10">
                                 <button class="btn btn-success" type="submit">{{ __('Create Soccer Match') }}</button>
@@ -117,12 +133,13 @@
                 type: 'GET',
                 success: function (response) {
                     document.getElementById('local_team').innerHTML = '';
-                    // console.log(response.name)
+                    // console.log(response)
                     {{--$('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.name);--}}
                     let imageUrl = response.team // Assuming 'logo_url' is the key holding the image URL in the response
                     let imageElement = document.createElement('img');
-                    imageUrl = `http://localhost:8000/storage/${imageUrl}`
-                    imageElement.setAttribute('src', imageUrl);
+                    let image = route('images.show', imageUrl);
+                    // imageUrl = `http://localhost:8000/storage/${imageUrl}`
+                    imageElement.setAttribute('src', image);
                     imageElement.width = 150;
                     imageElement.height = 150;
                     // Append the image element to the #local_team container
