@@ -31,7 +31,7 @@
                     <div class="bg-gradient-primary shadow-primary rounded pt-4 pb-3">
                         <h3 class="text-white text-capitalize ps-3 font-weight-medium ml-lg-4">{{ __('List of Teams') }}</h3>
                         @if(Auth::user()->rol_id === 1)
-                            <div class="float-end justify-content-end align-items-end mr-lg-5">
+                            <div class="float-right justify-content-end align-items-end mr-lg-5">
                                 <a href="{{route('matches.create')}}" class="btn btn-primary"
                                    title="Agregar una nuevo Equipo">
                                     <i class="ti ti-plus btn-icon-prepend"></i>

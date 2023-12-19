@@ -175,5 +175,8 @@
     "List of Referees": "Listado de Arbitros",
     "List of Captains": "Listado de Capitanes",
     "No Team": "Sin Equipo",
-    "The visiting team cannot be the same as the local team": "El equipo visitante no puede ser el mismo que el equipo local"
+    "The visiting team cannot be the same as the local team": "El equipo visitante no puede ser el mismo que el equipo local",
+    "Create User": "Crear Usuario",
+    "Captains": "Capitan",
+    "Administrator": "Administrador"
 }

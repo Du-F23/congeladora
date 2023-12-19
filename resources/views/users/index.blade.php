@@ -31,7 +31,7 @@
                     <div class="bg-gradient-primary shadow-primary rounded pt-4 pb-3">
                         <h3 class="text-white text-capitalize ps-3 font-weight-medium ml-lg-4">{{ __('List of Referees') }}</h3>
                         @if(Auth::user()->rol_id === 1)
-                            <div class="float-end justify-content-end align-items-end mr-lg-5">
+                            <div class="float-right justify-content-end align-items-end mr-lg-5">
                                 <a href="{{route('users.create')}}" class="btn btn-primary"
                                    title="{{ __('Add New User') }}">
                                     <i class="ti ti-plus btn-icon-prepend"></i>
@@ -124,7 +124,7 @@
                     <div class="bg-gradient-primary shadow-primary rounded pt-4 pb-3">
                         <h3 class="text-white text-capitalize ps-3 font-weight-medium ml-lg-4">{{ __('List of Captains') }}</h3>
                         @if(Auth::user()->rol_id === 1)
-                            <div class="float-end justify-content-end align-items-end mr-lg-5">
+                            <div class="float-right justify-content-end align-items-end mr-lg-5">
                                 <a href="{{route('users.create')}}" class="btn btn-primary"
                                    title="{{ __('Add New User') }}">
                                     <i class="ti ti-plus btn-icon-prepend"></i>
@@ -151,35 +151,35 @@
                                 <tr>
                                     <td><p class="font-weight-medium text-xl">{{ $loop->index + 1 }}</p></td>
                                     <td>
-                                        <img src="{{ asset('storage/'.$user->photo)}}" alt="{{$user->name}}"/>
-                                        <p class="font-weight-medium">{{ $user->name }}</p>
+                                        <img src="{{ asset('storage/'.$user->capitan->photo)}}" alt="{{$user->capitan->name}}"/>
+                                        <p class="font-weight-medium">{{ $user->capitan->name }}</p>
                                     </td>
                                     <td>
-                                        <h3 class="font-weight-medium text-body">{{ $user->email }}</h3>
+                                        <h3 class="font-weight-medium text-gray">{{ $user->capitan->email }}</h3>
                                     </td>
                                     <td>
-                                        <p class="font-weight-medium">{{ $user->number }}</p>
+                                        <h3 class="font-weight-medium">{{ $user->capitan->number }}</h3>
                                     </td>
                                     <td>
                                         @if ($user->team)
                                             <img src="{{ asset('storage/'.$user->team)}}" alt="{{$user->teamname}}"/>
-                                            <p class="font-weight-medium">{{ $user->team_name }}</p>
+                                            <p class="font-weight-medium">{{ $user->name }}</p>
                                         @else
                                             <p class="font-weight-medium">{{ __('No Team') }}</p>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('users.show', Vinkla\Hashids\Facades\Hashids::encode($user->id)) }}"
+                                        <a href="{{ route('users.show', Vinkla\Hashids\Facades\Hashids::encode($user->capitan->id)) }}"
                                            class="btn btn-facebook">
                                             <i class="ti ti-eye btn-icon-prepend"></i>
                                         </a>
                                         @if(Auth::user()->rol_id === 1)
-                                            <a href="{{ route('users.edit', Vinkla\Hashids\Facades\Hashids::encode($user->id)) }}"
+                                            <a href="{{ route('users.edit', Vinkla\Hashids\Facades\Hashids::encode($user->capitan->id)) }}"
                                                class="btn btn-twitter">
                                                 <i class="ti ti-edit btn-icon-prepend"></i>
                                             </a>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteUser" onclick="deleteUser({{$user->id}})">
+                                                    data-bs-target="#deleteUser" onclick="deleteUser({{$user->capitan->id}})">
                                                 <i class="ti ti-trash-x btn-icon-prepend"></i>
                                             </button>
                                         @endif

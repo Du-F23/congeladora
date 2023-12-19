@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Roles;
+use App\Models\Teams;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
@@ -17,11 +18,7 @@ class UsersController extends Controller
     {
         $arbitros=User::where('rol_id', 2)->get();
 //        $capitanes=User::where('rol_id', 3)->with('team')->get();
-        $capitanes = User::where('rol_id', 3)
-            ->leftJoin('teams', 'users.id', '=', 'teams.capitan_id')
-            ->select('users.*', 'teams.name as team_name', 'teams.team as team')
-            ->get();
-
+        $capitanes = Teams::with('capitan')->get();
         return view('users.index', compact('arbitros', 'capitanes'));
     }
 

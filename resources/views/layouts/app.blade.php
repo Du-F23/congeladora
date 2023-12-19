@@ -50,7 +50,7 @@
                             <div class="col-12 col-xl-4">
                                 <div class="justify-content-end d-flex">
                                     <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                                        <i class="mdi mdi-calendar"></i>{{\Carbon\Carbon::now()->locale(app()->getLocale())->translatedFormat('D, d M Y H:i A')}}
+                                        <i class="mdi mdi-calendar"></i>{{\Carbon\Carbon::now()->locale(app()->getLocale())->translatedFormat('D, d M Y')}}
                                     </div>
                                 </div>
                             </div>

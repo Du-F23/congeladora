@@ -28,6 +28,7 @@
                                             <h3>{{ $match->team_visit_goals }}</h3>
                                         </div>
                                     </div>
+                                    <label class="badge badge-info">Faltan {{ \Carbon\Carbon::now()->diff($match->dayOfMatch)->days }} días para el partido.</label>
                                 </div>
                             </div>
                         @endforeach
