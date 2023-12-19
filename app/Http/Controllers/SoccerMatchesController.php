@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MatchUser;
 use App\Models\SoccerMatches;
+use App\Models\TableMatch;
 use App\Models\Teams;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -105,8 +106,8 @@ class SoccerMatchesController extends Controller
             'started' => true,
         ]);
 
-        return redirect()->route('matches.show', $match->id);
 
+        return redirect()->route('matches.show', $match->id);
     }
 
     public function update(Request $request, $id)
@@ -147,8 +148,42 @@ class SoccerMatchesController extends Controller
             'goals_visit' => ['integer', 'nullable'],
         ]);
 
-//            dd($request->all());
         $id = SoccerMatches::find($id);
+
+        $winnerId = $id->ganador();
+
+        // Si hay un ganador, sumarle 3 puntos
+        if ($winnerId) {
+            $equipoGanador = TableMatch::where('team_id', $winnerId)->first();
+            $equipoGanador->matches += 1;
+            $equipoGanador->points += 3;
+            $equipoGanador->wins += 1;
+            $equipoGanador->goals_team = ($winnerId === $id->team_local_id) ? $request->goals_visit : $request->goals_local;
+            $equipoGanador->goals_conceded = ($winnerId === $id->team_local_id) ? $request->goals_visit : $request->goals_local;
+            $equipoGanador->save();
+
+            $equipoPerdedor = TableMatch::where('team_id', ($winnerId === $id->team_local_id) ? $id->team_visit_id : $id->team_local_id)->first();
+            $equipoPerdedor->loses += 1;
+            $equipoPerdedor->goals_conceded = ($winnerId === $id->team_local_id) ? $request->goals_visit : $request->goals_local;
+            $equipoGanador->goals_team = ($winnerId === $id->team_local_id) ? $request->goals_visit : $request->goals_local;
+            $equipoPerdedor->save();
+        }
+        else {
+            // Si hay un empate, sumarle 1 punto a cada equipo
+            $local = TableMatch::where('team_id', $id->team_local_id)->first();
+            $local->points += 1;
+            $local->draw += 1;
+            $local->goals_team = $request->goals_local;
+            $local->goals_conceded = $request->goals_visit;
+            $local->save();
+
+            $visitante = TableMatch::where('team_id', $id->team_visit_id)->first();
+            $visitante->points += 1;
+            $visitante->draw += 1;
+            $visitante->goals_team = $request->goals_visit;
+            $visitante->goals_conceded = $request->goals_local;
+            $visitante->save();
+        }
 
         if ($request->player_id_local || $request->goals_local) {
             $id->addGoals()->attach($request->player_id_local);

@@ -49,7 +49,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/soccer-matches', [SoccerMatchesController::class, 'index'])->name('matches.index');
     Route::get('/soccer-matches/create', [SoccerMatchesController::class, 'create'])->name('matches.create');
     Route::post('/soccer-matches/store', [SoccerMatchesController::class, 'store'])->name('matches.store');
-    Route::get('/soccer-matches/{id}', [SoccerMatchesController::class, 'show'])->name('matches.show');
     Route::get('/soccer-matches/{id}/json', [SoccerMatchesController::class, 'showJson'])->name('matches.json');
     Route::get('/soccer-matches/{id}/edit', [SoccerMatchesController::class, 'edit'])->name('matches.edit');
     Route::delete('/soccer-matches/{id}/delete', [SoccerMatchesController::class, 'destroy'])->name('matches.delete');
@@ -72,5 +71,8 @@ Route::middleware('auth')->group(function () {
         return $url . '/storage/' . $image;
     })->name('images.show');
 });
+
+Route::get('/soccer-matches/{id}', [SoccerMatchesController::class, 'show'])->name('matches.show');
+Route::get('/scores', [TableMatchController::class, 'index'])->name('scores.index');
 
 require __DIR__ . '/auth.php';

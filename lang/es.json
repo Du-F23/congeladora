@@ -178,5 +178,14 @@
     "The visiting team cannot be the same as the local team": "El equipo visitante no puede ser el mismo que el equipo local",
     "Create User": "Crear Usuario",
     "Captains": "Capitan",
-    "Administrator": "Administrador"
+    "Administrator": "Administrador",
+    "Scores": "Tabla General",
+    "Wins": "Victorias",
+    "Draw": "Empates",
+    "Loses": "Derrotas",
+    "Goals Matched": "Goles Anotados",
+    "Goals Conceded": "Goles En Contra",
+    "Difference Goals": "Diferencia De Goles",
+    "Points": "Puntos",
+    "Games Played": "Partidos Jugados"
 }

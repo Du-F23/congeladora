@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Validation\Rules;
 
 class UsersController extends Controller
 {
@@ -40,21 +41,21 @@ class UsersController extends Controller
             'photo' => ['nullable', 'file']
         ]);
 
-        if ($request->file('photo')) {
-            $photo = 'profile/' . str_replace(" ", "_", $request->name) . '_' . date('Y-m-d') . '_' . $request->file('photo')->getClientOriginalName();
-            $photo = $request->file('photo')->storeAs('public', $photo);
-            $photo = str_replace("public/", "", $photo);
-        }
-
-
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'number' => $request->number,
-            'photo' => $photo,
             'rol_id' => $request->rol_id
         ]);
+
+        if ($request->file('photo')) {
+            $photo = 'profile/' . str_replace(" ", "_", $request->name) . '_' . date('Y-m-d') . '_' . $request->file('photo')->getClientOriginalName();
+            $photo = $request->file('photo')->storeAs('public', $photo);
+            $photo = str_replace("public/", "", $photo);
+            $user->photo = $photo;
+        }
+
 
         return redirect()->route('users.index');
     }

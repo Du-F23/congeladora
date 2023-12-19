@@ -44,5 +44,12 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'rol_id' => 1,
         ]);
+
+        User::create([
+            'name' => 'Arbitro',
+            'email' => 'arbitro@canchas.com',
+            'password' => Hash::make('12345678'),
+            'rol_id' => 2,
+        ]);
     }
 }

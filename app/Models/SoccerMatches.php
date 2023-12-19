@@ -51,8 +51,19 @@ class SoccerMatches extends Model
         return $this->belongsToMany(MatchUser::class, 'match_users', 'soccerMatch_id', 'player_id');
     }
 
-    public function ganador()
+    public function ganador(): ?int
     {
-        return $this->team_local_goals > $this->team_visit_goals ? $this->team_local_id : $this->team_visit_id;
+        if ($this->team_local_goals > $this->team_visit_goals) {
+            return $this->team_local_id;
+        }
+
+        // Si el equipo visitante ganó, devolver su ID
+        if ($this->team_local_goals < $this->team_visit_goals) {
+            return $this->team_visit_id;
+        }
+
+        // Si hubo empate, devolver null
+        return null;
     }
+
 }

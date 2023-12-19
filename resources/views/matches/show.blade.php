@@ -26,11 +26,11 @@
                                         <div class="d-flex justify-content-between align-items-center col-lg-12">
                                             <div class="col-lg-5">
                                                 <div class="text-center ml-lg-2">
+                                                    <h2 class="text-2xl font-weight-medium text-capitalize">{{ $match->team_local->name }}</h2>
+                                                    <h1>{{ $match->team_local_goals }}</h1>
                                                     <img src="{{ asset('storage/'.$match->team_local->team)}}"
                                                          alt="{{$match->team_local->name}}"
                                                          class="rounded-full card-img"/>
-                                                    <h2 class="text-2xl font-weight-medium text-capitalize">{{ $match->team_local->name }}</h2>
-                                                    <h3>{{ $match->team_local_goals }}</h3>
                                                 </div>
                                             </div>
                                             <div class="col-lg-2">
@@ -40,15 +40,15 @@
                                             </div>
                                             <div class="col-lg-5">
                                                 <div class="text-center mr-lg-2">
+                                                    <h2 class="text-2xl font-weight-medium text-capitalize">{{ $match->team_visit->name }}</h2>
+                                                    <h1>{{ $match->team_visit_goals }}</h1>
                                                     <img src="{{ asset('storage/'.$match->team_visit->team)}}"
                                                          alt="{{$match->team_visit->name}}"
                                                          class="rounded-full card-img"/>
-                                                    <h2 class="text-2xl font-weight-medium text-capitalize">{{ $match->team_visit->name }}</h2>
-                                                    <h3>{{ $match->team_visit_goals }}</h3>
                                                 </div>
                                             </div>
                                         </div>
-                                        @if(Auth::user()->rol_id != 3 && Auth::user()->rol_id != 4)
+                                        @if(Auth::check() &&Auth::user()->rol_id != 3 && Auth::user()->rol_id != 4)
                                         <h3>{{ __('Add Goals') }}</h3>
                                         <form method="POST"
                                               action="{{ route('matches.team_goals', $match->id) }}"

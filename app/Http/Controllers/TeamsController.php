@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TableMatch;
 use App\Models\Teams;
 use App\Models\TeamsUser;
 use App\Models\User;
@@ -59,11 +60,22 @@ class TeamsController extends Controller
             $team = str_replace("public/", "", $team);
         }
 
-        Teams::create([
+        $team = Teams::create([
             'name' => $request->name,
             'acronym' => $request->acronym,
             'team' => $team,
             'capitan_id' => $request->capitan_id
+        ]);
+
+        TableMatch::create([
+            'team_id' => $team->id,
+            'matches' => 0,
+            'wins' => 0,
+            'loses' => 0,
+            'draw' => 0,
+            'points' => 0,
+            'goals_team' => 0,
+            'goals_conceded' => 0
         ]);
 
         return redirect()->route('teams.index')->with('status', __('Team Created Successfully!'));

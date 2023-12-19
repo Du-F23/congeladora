@@ -5,16 +5,17 @@
 
 @section('content')
     <div class="row">
-        @if( session('status') )
-            <div class="alert alert-success alert-dismissible text-dark mb-4" role="alert">
+        <div class="col-md-12 grid-margin">
+            @if( session('status') )
+                <div class="alert alert-success alert-dismissible text-dark mb-4" role="alert">
                 <span class="text-sm"> <a href="javascript:" class="alert-link text-dark">Excelente</a>.
                     {{ session('status') }}.</span>
-                <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
-                        aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
+                    <button type="button" class="btn btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             @if( session('statusError') )
                 <div class="alert alert-danger alert-dismissible text-dark mb-4" role="alert">
                 <span class="text-sm"> <a href="javascript:" class="alert-link text-dark">Error</a>.
@@ -25,7 +26,6 @@
                     </button>
                 </div>
             @endif
-        <div class="col-md-12 grid-margin stretch-card mt-3">
             <div class="card">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary rounded pt-4 pb-3">
@@ -70,7 +70,8 @@
                                                class="btn btn-twitter">
                                                 <i class="ti ti-edit btn-icon-prepend"></i>
                                             </a>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTeam" onclick="deleteTeam({{$team->id}})">
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteTeam" onclick="deleteTeam({{$team->id}})">
                                                 <i class="ti ti-trash-x btn-icon-prepend"></i>
                                             </button>
                                         @endif
@@ -102,7 +103,8 @@
                                                     <button class="btn btn-secondary" type="button"
                                                             data-bs-dismiss="modal">{{ __('Cancel')}}
                                                     </button>
-                                                    <button class="btn btn-danger" type="submit">{{ __('Delete Team') }}</button>
+                                                    <button class="btn btn-danger"
+                                                            type="submit">{{ __('Delete Team') }}</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -114,20 +116,20 @@
                 </div>
             </div>
         </div>
-            <script type="application/javascript">
-                // hace una peticion ajax para obtener la informacion de la moto
-                function deleteTeam(id) {
-                    let form = document.getElementById('deleteForm')
-                    form.action = route('teams.delete', id)
-                    $.ajax({
-                        url: route('teams.json', id),
-                        type: 'GET',
-                        success: function (response) {
-                            // console.log(response.name)
-                            $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.name);
-                        }
-                    })
-                }
-            </script>
+        <script type="application/javascript">
+            // hace una peticion ajax para obtener la informacion de la moto
+            function deleteTeam(id) {
+                let form = document.getElementById('deleteForm')
+                form.action = route('teams.delete', id)
+                $.ajax({
+                    url: route('teams.json', id),
+                    type: 'GET',
+                    success: function (response) {
+                        // console.log(response.name)
+                        $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.name);
+                    }
+                })
+            }
+        </script>
     </div>
 @endsection
