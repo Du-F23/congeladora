@@ -33,7 +33,7 @@
                             <tbody>
                             @foreach($scores as $team)
                                 <tr>
-                                    <td><p class="font-weight-medium text-xl">{{ $loop->index + 1 }}</p></td>
+                                    <td><h3 class="font-weight-medium text-gray">{{ $loop->index + 1 }}</h3></td>
                                     <td>
                                         <img src="{{ asset('storage/'.$team->team->team)}}" alt="{{$team->team->name}}"/>
                                         <h2 class="font-weight-medium">{{ $team->team->name }}</h2>

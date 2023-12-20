@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('Create Team') }}
+    {{ __('Create User') }}
 @endsection
 
 @section('content')

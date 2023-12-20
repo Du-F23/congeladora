@@ -12,7 +12,7 @@ class TableMatchController extends Controller
      */
     public function index()
     {
-        $scores=TableMatch::all();
+        $scores=TableMatch::orderBy('points', 'DESC')->orderBy('matches', 'DESC')->get();
 
         return view('scores.index', compact('scores'));
     }

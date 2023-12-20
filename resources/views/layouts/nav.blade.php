@@ -34,7 +34,7 @@
                 </li>
             @endif
         @else
-            <li class="nav-item {{ route('welcome') ? 'active' : '' }}">
+            <li class="nav-item {{ request()->routeIs('welcome') ? 'active' : ''  }}">
                 <a class="nav-link" href="{{ route('welcome') }}">
                     <i class="icon-columns menu-icon"></i>
                     <span class="menu-title">{{ __('Soccer Matches') }}</span>

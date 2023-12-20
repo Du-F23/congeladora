@@ -68,12 +68,14 @@
                                         <h3>{{ Carbon\Carbon::parse($match->dayOfMatch)->format('D, d M Y H:i') }}</h3>
                                     </td>
                                     <td>
+                                        @if(Auth::user()->rol_id != 1)
                                         <a href="{{ route('matches.show', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
                                            class="btn btn-facebook">
                                             <i class="ti ti-eye btn-icon-prepend"></i>
                                         </a>
+                                        @endif
                                         @if(Auth::user()->rol_id === 1)
-                                            <a href="{{ route('matches.edit', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
+                                            <a href="{{ route('matches.show', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
                                                class="btn btn-twitter">
                                                 <i class="ti ti-edit btn-icon-prepend"></i>
                                             </a>
