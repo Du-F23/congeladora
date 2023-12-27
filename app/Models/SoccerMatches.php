@@ -36,9 +36,9 @@ class SoccerMatches extends Model
 
     public function scopeThisWeek($query) {
         $today = Carbon::now()->format('Y-m-d');
-        $endOfThisWeek = Carbon::now()->addDays(7)->format('Y-m-d');
+        $endOfThisWeek = Carbon::now()->addDays(8)->format('Y-m-d');
 
-        return $query->where('started', false)->whereBetween('dayOfMatch', [$today, $endOfThisWeek]);
+        return $query->whereBetween('dayOfMatch', [$today, $endOfThisWeek]);
     }
 
     public function goals()

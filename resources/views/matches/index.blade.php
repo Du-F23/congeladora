@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+    use Vinkla\Hashids\Facades\Hashids;
+@endphp
 @extends('layouts.app')
 @section('title')
     {{ __('Soccer Matches') }}
@@ -15,29 +19,36 @@
                 </button>
             </div>
         @endif
-            @if( session('statusError') )
-                <div class="alert alert-danger alert-dismissible text-dark mb-4" role="alert">
+        @if( session('statusError') )
+            <div class="alert alert-danger alert-dismissible text-dark mb-4" role="alert">
                 <span class="text-sm"> <a href="javascript:" class="alert-link text-dark">Error</a>.
                     {{ session('statusError') }}.</span>
-                    <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
-                            aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
+                <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <div class="col-md-12 grid-margin stretch-card mt-3">
             <div class="card">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary rounded pt-4 pb-3">
-                        <h3 class="text-white text-capitalize ps-3 font-weight-medium ml-lg-4">{{ __('List of Teams') }}</h3>
+                        <h3 class="text-white text-capitalize ps-3 font-weight-medium ml-lg-4">{{ __('List of Soccer Matches') }}</h3>
                         @if(Auth::user()->rol_id === 1)
                             <div class="float-right justify-content-end align-items-end mr-lg-5">
                                 <a href="{{route('matches.create')}}" class="btn btn-primary"
-                                   title="Agregar una nuevo Equipo">
+                                   title="{{ __('Create Soccer Match') }}">
                                     <i class="ti ti-plus btn-icon-prepend"></i>
                                 </a>
                             </div>
                         @endif
+                        <form method="post" action="{{ route('send.email') }}">
+                            @csrf
+                            <button class="btn btn-primary">
+                                Send email
+                                <i class="ti ti-plus btn-icon-prepend"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <div class="card-body mt-auto">
@@ -48,6 +59,7 @@
                                 <th>#</th>
                                 <th>{{ __('Team Local') }}</th>
                                 <th>{{ __('Team Visit') }}</th>
+                                <th>{{ __('Started') }}</th>
                                 <th>{{ __('Day Of Match') }}</th>
                                 <th>{{ __('Actions') }}</th>
                             </tr>
@@ -57,29 +69,41 @@
                                 <tr>
                                     <td><p class="font-weight-medium text-xl">{{ $loop->index + 1 }}</p></td>
                                     <td>
-                                        <img src="{{ asset('storage/'.$match->team_local->team)}}" alt="{{$match->team_local->name}}"/>
+                                        <img src="{{ asset('storage/'.$match->team_local->team)}}"
+                                             alt="{{$match->team_local->name}}"/>
                                         <h2 class="font-weight-medium">{{ $match->team_local->name }}</h2>
                                     </td>
                                     <td>
-                                        <img src="{{ asset('storage/'.$match->team_visit->team)}}" alt="{{$match->team_visit->name}}"/>
+                                        <img src="{{ asset('storage/'.$match->team_visit->team)}}"
+                                             alt="{{$match->team_visit->name}}"/>
                                         <h2 class="font-weight-medium">{{ $match->team_visit->name }}</h2>
                                     </td>
                                     <td>
-                                        <h3>{{ Carbon\Carbon::parse($match->dayOfMatch)->format('D, d M Y H:i') }}</h3>
+                                        @if(!$match->started)
+                                            <label
+                                                class="badge badge-info">Faltan {{Carbon::now()->diff($match->dayOfMatch)->days}}
+                                                días para el partido.</label>
+                                        @else
+                                            <label class="badge badge-danger">{{ __('Soccer Match Started') }}</label>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <h3>{{ Carbon::parse($match->dayOfMatch)->locale(app()->getLocale())->translatedFormat('D, d M Y h:i A') }}</h3>
                                     </td>
                                     <td>
                                         @if(Auth::user()->rol_id != 1)
-                                        <a href="{{ route('matches.show', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
-                                           class="btn btn-facebook">
-                                            <i class="ti ti-eye btn-icon-prepend"></i>
-                                        </a>
+                                            <a href="{{ route('matches.show', Hashids::encode($match->id)) }}"
+                                               class="btn btn-facebook">
+                                                <i class="ti ti-eye btn-icon-prepend"></i>
+                                            </a>
                                         @endif
                                         @if(Auth::user()->rol_id === 1)
-                                            <a href="{{ route('matches.show', Vinkla\Hashids\Facades\Hashids::encode($match->id)) }}"
+                                            <a href="{{ route('matches.show', Hashids::encode($match->id)) }}"
                                                class="btn btn-twitter">
                                                 <i class="ti ti-edit btn-icon-prepend"></i>
                                             </a>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTeam" onclick="deleteTeam({{$match->id}})">
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteTeam" onclick="deleteTeam({{$match->id}})">
                                                 <i class="ti ti-trash-x btn-icon-prepend"></i>
                                             </button>
                                         @endif
@@ -113,7 +137,8 @@
                                                     <button class="btn btn-secondary" type="button"
                                                             data-bs-dismiss="modal">{{ __('Cancel')}}
                                                     </button>
-                                                    <button class="btn btn-danger" type="submit">{{ __('Delete Soccer Match') }}</button>
+                                                    <button class="btn btn-danger"
+                                                            type="submit">{{ __('Delete Soccer Match') }}</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -125,20 +150,93 @@
                 </div>
             </div>
         </div>
-            <script type="application/javascript">
-                // hace una peticion ajax para obtener la informacion de la moto
-                function deleteTeam(id) {
-                    let form = document.getElementById('deleteForm')
-                    form.action = route('matches.delete', id)
-                    $.ajax({
-                        url: route('matches.json', id),
-                        type: 'GET',
-                        success: function (response) {
-                            // console.log(response)
-                            $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.team_local.name + ' vs ' + response.team_local.name + ' ' +`{{ __('Day Of Match') }}` + response.dayOfMatch);
-                        }
-                    })
-                }
-            </script>
+
+        <div class="col-md-12 grid-margin stretch-card mt-3">
+            <div class="card">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary rounded pt-4 pb-3">
+                        <h3 class="text-white text-capitalize ps-3 font-weight-medium ml-lg-4">{{ __('List of Soccer Matches Played') }}</h3>
+                    </div>
+                </div>
+                <div class="card-body mt-auto">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{{ __('Team Local') }}</th>
+                                <th>{{ __('Team Visit') }}</th>
+                                <th>{{ __('Started') }}</th>
+                                <th>{{ __('Day Of Match') }}</th>
+                                <th>{{ __('Actions') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($matches as $match)
+                                <tr>
+                                    <td><p class="font-weight-medium text-xl">{{ $loop->index + 1 }}</p></td>
+                                    <td>
+                                        <img src="{{ asset('storage/'.$match->team_local->team)}}"
+                                             alt="{{$match->team_local->name}}"/>
+                                        <h2 class="font-weight-medium">{{ $match->team_local->name }}</h2>
+                                    </td>
+                                    <td>
+                                        <img src="{{ asset('storage/'.$match->team_visit->team)}}"
+                                             alt="{{$match->team_visit->name}}"/>
+                                        <h2 class="font-weight-medium">{{ $match->team_visit->name }}</h2>
+                                    </td>
+                                    <td>
+                                        @if(!$match->started)
+                                            <label
+                                                class="badge badge-info">Faltan {{Carbon::now()->diff($match->dayOfMatch)->days}}
+                                                días para el partido.</label>
+                                        @else
+                                            <label class="badge badge-danger">{{ __('Soccer Match Started') }}</label>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <h3>{{ Carbon::parse($match->dayOfMatch)->locale(app()->getLocale())->translatedFormat('D, d M Y h:i A') }}</h3>
+                                    </td>
+                                    <td>
+                                        @if(Auth::user()->rol_id != 1)
+                                            <a href="{{ route('matches.show', Hashids::encode($match->id)) }}"
+                                               class="btn btn-facebook">
+                                                <i class="ti ti-eye btn-icon-prepend"></i>
+                                            </a>
+                                        @endif
+                                        @if(Auth::user()->rol_id === 1)
+                                            <a href="{{ route('matches.show', Hashids::encode($match->id)) }}"
+                                               class="btn btn-twitter">
+                                                <i class="ti ti-edit btn-icon-prepend"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteTeam" onclick="deleteTeam({{$match->id}})">
+                                                <i class="ti ti-trash-x btn-icon-prepend"></i>
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="application/javascript">
+            // hace una peticion ajax para obtener la informacion de la moto
+            function deleteTeam(id) {
+                let form = document.getElementById('deleteForm')
+                form.action = route('matches.delete', id)
+                $.ajax({
+                    url: route('matches.json', id),
+                    type: 'GET',
+                    success: function (response) {
+                        // console.log(response)
+                        $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.team_local.name + ' vs ' + response.team_local.name + ' ' + `{{ __('Day Of Match') }}` + response.dayOfMatch);
+                    }
+                })
+            }
+        </script>
     </div>
 @endsection

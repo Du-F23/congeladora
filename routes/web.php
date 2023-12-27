@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (!Auth::check()){
-    $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->get();
+    $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->where('started', false)->get();
 
     return view('welcome', compact('soccer'));
     }
@@ -27,7 +27,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/dashboard', function () {
-    $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->get();
+    $soccer = SoccerMatches::with('team_local', 'team_visit', 'referee', 'goals')->thisWeek()->where('started', false)->get();
     return view('dashboard', compact('soccer'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -64,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{id}/update', [UsersController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}/delete', [UsersController::class, 'destroy'])->name('users.delete');
+
+    Route::post('/send', [SoccerMatchesController::class, 'sendEmail'])->name('send.email');
 
 
     Route::get('/storage/{image}', function ($image) {

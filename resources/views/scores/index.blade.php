@@ -53,53 +53,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="modal fade" id="deleteTeam" tabindex="-1"
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">{{ __('Delete Team') }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-12">
-                                            <form action="" id="deleteForm" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <p id="banner">{{ __('Are you sure you want to delete this record?') }}</p>
-                                                <div class="modal-footer">
-                                                    <button class="btn btn-secondary" type="button"
-                                                            data-bs-dismiss="modal">{{ __('Cancel')}}
-                                                    </button>
-                                                    <button class="btn btn-danger" type="submit">{{ __('Delete Team') }}</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-            <script type="application/javascript">
-                // hace una peticion ajax para obtener la informacion de la moto
-                function deleteTeam(id) {
-                    let form = document.getElementById('deleteForm')
-                    form.action = route('teams.delete', id)
-                    $.ajax({
-                        url: route('teams.json', id),
-                        type: 'GET',
-                        success: function (response) {
-                            // console.log(response.name)
-                            $('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.name);
-                        }
-                    })
-                }
-            </script>
     </div>
 @endsection
