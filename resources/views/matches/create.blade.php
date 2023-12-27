@@ -159,8 +159,8 @@
                     {{--$('#banner').html(`{{__('Are you sure you want to delete this record?')}}` + ' ' + response.name);--}}
                     let imageUrl = response.team // Assuming 'logo_url' is the key holding the image URL in the response
                     let imageElement = document.createElement('img');
-                    imageUrl = `http://localhost:8000/storage/${imageUrl}`
-                    imageElement.setAttribute('src', imageUrl);
+                    let image = route('images.show', imageUrl);
+                    imageElement.setAttribute('src', image);
                     imageElement.width = 150;
                     imageElement.height = 150;
                     // Append the image element to the #local_team container
